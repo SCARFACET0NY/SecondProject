@@ -1,5 +1,5 @@
 package text_processor;
 
 public interface Parsable {
-    String[] parse(String text);
+    void parse(String source);
 }

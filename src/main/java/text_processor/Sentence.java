@@ -1,24 +1,41 @@
 package text_processor;
 
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class Sentence implements Parsable {
-    @Override
-    public String[] parse(String text) {
-        text = text.replaceAll("\\s+", " ");
-        List<String> sentences = new ArrayList<>();
+public class Sentence extends TextElement {
+    private List<Word> words;
+    private List<PunctuationMark> punctuationsParks;
 
-        BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
-        iterator.setText(text);
+    public Sentence(String value) {
+        super(value);
+    }
 
-        int start = iterator.first();
-        for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
-            sentences.add(text.substring(start, end));
+    public void parseWords() {
+        words = new ArrayList<>();
+
+        String[] rawWords = getValue().replaceAll("\\W+", " ").split(" ");
+
+        for (String word : rawWords) {
+            words.add(new Word(word));
         }
+    }
 
-        return sentences.toArray(new String[0]);
+    public void parsePunctuationMarks() {
+        punctuationsParks = new ArrayList<>();
+
+        String[] rawPunctuationMarks = getValue().replaceAll("\\w+", "").split("\\s+");
+
+        for (String mark : rawPunctuationMarks) {
+            if (mark.length() > 0) punctuationsParks.add(new PunctuationMark(mark));
+        }
+    }
+
+    public List<Word> getWords() {
+        return words;
+    }
+
+    public List<PunctuationMark> getPunctuationsParks() {
+        return punctuationsParks;
     }
 }

@@ -1,8 +1,26 @@
 package text_processor;
 
-public class Word implements Parsable {
-    @Override
-    public String[] parse(String text) {
-        return text.replaceAll("\\W+", " ").split(" ");
+import java.util.ArrayList;
+import java.util.List;
+
+public class Word extends TextElement {
+    private List<Symbol> symbols;
+
+    public Word(String value) {
+        super(value);
+    }
+
+    public void parseSymbols() {
+        symbols = new ArrayList<>();
+
+        String[] rawSymbols = getValue().replaceAll("\\W+", "").split("");
+
+        for (String symbol : rawSymbols) {
+            symbols.add(new Symbol(symbol));
+        }
+    }
+
+    public List<Symbol> getSymbols() {
+        return symbols;
     }
 }

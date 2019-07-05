@@ -1,56 +1,68 @@
 package text_processor;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Parser {
-    public String[] parseSentences(String text) {
-        String[] sentences = new Sentence().parse(text);
+public class Parser implements Parsable {
+    public void parse(String source) {
+        Text text = new Text();
+        text.parse(source);
 
-        System.out.println("Parsed " + sentences.length + " sentences:");
-        for (String sentence: sentences) {
-            System.out.println(sentence);
-        }
-        System.out.println();
-
-        return sentences;
+        List<Sentence> sentences = text.getSentences();
+        printSentences(sentences);
     }
 
-    public String[] parseWords(String text) {
-        String[] words = new Word().parse(text);
+    public void printSentences(List<Sentence> sentences) {
+        System.out.println("Parsed " + sentences.size() + " sentences:");
+        System.out.println();
 
-        System.out.println("Parsed " + words.length + " words:");
-        for (String word : words) {
-            System.out.print(word + " ");
+        int count = 1;
+        for (Sentence sentence: sentences) {
+            System.out.println("Sentence: " + count++);
+            System.out.println(sentence.getValue());
+            System.out.println();
+
+            sentence.parseWords();
+            sentence.parsePunctuationMarks();
+
+            printWords(sentence.getWords());
+            printPunctuationMarks(sentence.getPunctuationsParks());
         }
-        System.out.println();
-        System.out.println();
 
-        return words;
+        System.out.println();
     }
 
-    public String[] parseSymbols(String text) {
-        String[] symbols = new Symbol().parse(text);
+    public void printWords(List<Word> words) {
+        List<Symbol> symbols = new ArrayList<>();
 
-        System.out.println("Parsed " + symbols.length + " symbols:");
-        for (String symbol : symbols) {
-            System.out.print(symbol + " ");
+        System.out.println("Parsed " + words.size() + " words:");
+        for (Word word : words) {
+            System.out.print(word.getValue() + " ");
+
+            word.parseSymbols();
+            symbols.addAll(word.getSymbols());
         }
         System.out.println();
         System.out.println();
 
-        return symbols;
+        printSymbols(symbols);
     }
 
-    public String[] parsePunctuationMarks(String text) {
-        String[] marks = new PunctuationMark().parse(text);
-
-        System.out.println("Parsed " + marks.length + " punctuation marks:");
-        for (String mark : marks) {
-            System.out.print(mark + " ");
+    public void printSymbols(List<Symbol> symbols) {
+        System.out.println("Parsed " + symbols.size() + " symbols:");
+        for (Symbol symbol : symbols) {
+            System.out.print(symbol.getValue() + " ");
         }
         System.out.println();
         System.out.println();
+    }
 
-        return marks;
+    public void printPunctuationMarks(List<PunctuationMark> marks) {
+        System.out.println("Parsed " + marks.size() + " punctuation marks:");
+        for (PunctuationMark mark : marks) {
+            System.out.print(mark.getValue() + " ");
+        }
+        System.out.println();
+        System.out.println();
     }
 }
